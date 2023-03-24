@@ -8,6 +8,7 @@ In this page, I have the c code for different types of data structures.
 4. Doubly linked list
 
 References:
+
 https://www.digitalocean.com/community/tutorials/queue-in-c
 https://www.digitalocean.com/community/tutorials/stack-in-c
 https://www.javatpoint.com/singly-linked-list
