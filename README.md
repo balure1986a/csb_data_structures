@@ -1,6 +1,6 @@
 # data_structures
 
-In this page, I have the c code for different types of data structures.
+Data structure code written in c language by referring to various online tutorials.
 
 1. Queue
 2. Stack
