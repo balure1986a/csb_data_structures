@@ -1,0 +1,491 @@
+Data Structure
+============================
+
+###########################################
+STACK operation (PUSH and POP)
+###########################################
+
+#include <iostream>
+using namespace std;
+#define MAX 5
+class Stack
+{
+	public:
+    int top;
+    int myStack[MAX];
+    Stack() { top = -1; }
+    int push(int item);
+    int pop();
+    int display();
+};
+
+int Stack::push(int item)
+{
+	if (top >= MAX-1)
+    	cout << "ERROR: overflow" << endl;
+    else
+   	{
+    	top++;
+      myStack[top] = item;
+      cout << "Pushed item " << item << endl;
+    }
+    return 0;
+}
+
+int Stack::pop()
+{
+	int item;
+	if (top < 0)
+    	cout << "ERROR: underflow" << endl;
+    else
+    {
+    	item = myStack[top];
+      top--;
+      cout << "Popped item " << item  << endl;
+    }
+    return item;
+}
+
+int Stack::display()
+{
+	if (top < 0)
+    	cout << "ERROR: underflow" << endl;
+    else
+    {
+  		for (int i = 0; i < top+1; i++)
+        	cout << myStack[i] << " ";
+    }
+    return 0;
+}
+    
+int main() {
+  Stack s;
+  s.push(1);
+  s.push(2);
+  s.push(3);
+  s.push(4);
+  s.display(); cout << endl;
+  s.pop();
+  s.display(); cout << endl;
+  return 0;
+}
+
+###########################################
+STACK operation using Linked List (PUSH and POP)
+###########################################
+
+#include <iostream>
+using namespace std;
+
+struct Node
+{
+	int data;
+    Node *next;
+};
+
+Node *top = NULL;
+Node *temp = NULL;
+Node *tempTop = NULL;
+
+int push(int item)
+{
+	if (top == NULL)
+    {
+    	top = (struct Node *) malloc(1*sizeof(struct Node));
+        top->data = item;
+        top->next = NULL;
+        cout << "Pushed item " << item << endl;
+    }
+    else
+    {
+    	temp = (struct Node *) malloc(1*sizeof(struct Node)); 	// create temp Node
+        temp->data = item;		// fill temp Node data
+        temp->next = top;		// fill temp Node pointer to NULL
+        top = temp;				// assign top to the temp Node
+        cout << "Pushed item " << item << endl;
+    }
+    return 0;
+}
+
+int display()
+{
+	tempTop = top;
+    if (tempTop == NULL)
+    {
+    	cout << "ERROR: underflow" << endl;
+        return 0;
+    }
+    while (tempTop != NULL)
+    {	
+    	cout << tempTop->data << endl;
+        tempTop = tempTop->next;
+    }
+    return 0;
+}
+
+int pop()
+{
+	tempTop = top;
+    if (tempTop == NULL)
+    {
+    	cout << "ERROR: underflow" << endl;
+        return 0;
+    }
+    else
+    {
+    	int item = tempTop->data;		// read the top data
+        cout << "Popped item " << item << endl;
+        tempTop = tempTop->next;	// next point to the same Node
+        free(top);					// free the top Node
+        top = tempTop;				// assign new top to the top Node
+        
+    }
+    return 0;
+}
+
+int main() 
+{
+    push(1);
+    push(2);
+    push(3);
+    display();
+    pop();
+    display();
+    pop();
+    display();
+
+    return 0;
+}
+
+###########################################
+QUEUE operation (EnQ and DeQ)
+###########################################
+
+#include <iostream>
+using namespace std;
+
+#define MAX 100
+
+class Queue
+{
+	public:
+    	int front;
+        int rear;
+    	int myQ[MAX];
+        Queue() { front = -1; rear = -1; }
+        int enQ(int item);
+        int deQ();
+        int display();
+};
+
+int Queue::enQ(int item)
+{
+	if (rear == MAX-1)
+    	cout << "ERROR: full" << endl;
+	if (front == -1)
+    {
+    	front++;
+        rear++;
+        myQ[rear] = item;
+        cout << "ENQUEUE first item " << item << endl;
+    }
+    else
+    {
+    	rear++;
+        myQ[rear] = item;
+        cout << "ENQUEUE item " << item << endl;
+    }
+    return 0;
+}
+
+int Queue::deQ()
+{
+	if (front == -1)
+    	cout << "ERROR: empty" << endl;
+    else
+    {
+    	int item = myQ[front];
+        front++;
+        cout << "DEQUEUE item " << item << endl;
+    }
+    return 0;
+}
+
+int Queue::display()
+{
+	if (front == -1 && rear == -1)
+    	cout << "ERROR: empty" << endl;
+    else
+    {
+    	for (int i = front; i <= rear; i++)
+        	cout << myQ[i] << " ";
+    }
+    return 0;
+}
+
+int main() 
+{
+    Queue q;
+    q.enQ(10);
+    q.enQ(20);
+    q.enQ(30);
+    q.display(); cout << endl;
+    q.deQ();
+    q.deQ();
+    q.display(); cout << endl;
+    return 0;
+}
+
+
+###########################################
+QUEUE operation using Linked List (Enqueue and Dequeue)
+###########################################
+
+#include <iostream>
+using namespace std;
+
+struct Node
+{
+	int data;
+    Node *next;
+};
+
+Node *front = NULL;
+Node *rear = NULL;
+Node *temp = NULL;
+
+int insert(int item)
+{
+    temp = (struct Node *) malloc(1*sizeof(struct Node));
+    if (temp == NULL)
+    {
+      cout << "ERROR: overflow" << endl;
+      return 0;
+    }
+    else
+    {
+        temp->data = item;
+	  	if (front == NULL)
+        {
+        	front = temp;	// assign front and rear to the FIRST node
+            rear = temp;
+            front->next = NULL;	// assign front and rear to NULL, as it is the first node.
+            rear->next = NULL;
+            cout << "ENQUEUE first item " << item << endl;
+        }
+        else
+        {
+        	rear->next = temp;	// update only rear.
+            rear = temp;
+            rear->next = NULL;
+            cout << "ENQUEUE item " << item << endl;
+        }
+    }
+    return 0;
+}
+
+int display()
+{
+    if (front == NULL && rear == NULL)
+    {
+    	cout << "ERROR: underflow" << endl;
+        return 0;
+    }
+    else
+    {
+    	temp = front;	// display from front
+        while(temp != NULL)
+        {
+          cout << temp->data << endl;
+          temp = temp->next;
+        }
+    }
+    return 0;
+}
+
+int deleting()
+{
+    if (front == NULL)
+    {
+    	cout << "ERROR: empty" << endl;
+        return 0;
+    }
+    else
+    {
+      temp = front;		// delete from front
+      int item = temp->data;
+      cout << "DEQUEUE item " << item << endl;
+      temp = temp->next;	// set next pointer to temp
+      free(front);
+      front = temp;			// assign temp to front.
+    }
+    return 0;
+}
+
+int main() 
+{
+    insert(10);
+    insert(20);
+    insert(30);
+    display();
+	deleting();
+    deleting();
+    display();
+    return 0;
+}
+
+
+###########################################
+Bubble sort (ASCENDING ORDER)
+###########################################
+
+#include <iostream>
+#include <string.h>
+
+using namespace std;
+
+void bubbleSort(int*, int);
+
+void bubbleSort(int* parr, int len)
+{
+  int* curr = parr;
+  int* next = parr + 1;
+  for (int i = 0; i < len - 1; i++)
+  {
+    for (int j = 0; j < len - 1 - i; j++)
+    {
+      if (*curr > *next)
+      {
+        int temp;
+        temp = *curr;
+        *curr = *next;
+        *next = temp;
+      }
+      curr = parr + j + 1;
+      next = curr + 1;
+    }
+    // reset the curr and next pointer
+    curr = parr;
+    next = curr + 1;
+  }
+}
+
+int main()
+{
+  int arr[] = { 50, 40, 30, 20, 10 };
+  int len = sizeof(arr) / sizeof(int);
+  cout << "Len = " << len << endl;
+  cout << "Before = ";
+  for (int i = 0; i < len; i++)
+  {
+    cout << arr[i] << " ";
+  }
+  bubbleSort(arr, len);
+  cout << endl << "After = ";
+  for (int i = 0; i < len; i++)
+  {
+    cout << arr[i] << " ";
+  }
+  return 0;
+}
+
+###########################################
+Selection sort (ASCENDING ORDER)
+###########################################
+
+#include <iostream>
+#include <string.h>
+
+using namespace std;
+
+void selectionSort(int*, int);
+
+void selectionSort(int* parr, int len)
+{
+  int *curr = parr;
+  int *next = parr + 1;
+  for (int i = 0; i < len - 1; i++)
+  {
+    for (int j = 0; j < len - 1 - i; j++)
+    {
+      if (*curr > *next)
+      {
+        int temp;
+        temp = *curr;
+        *curr = *next;
+        *next = temp;
+      }
+      next++;
+    }
+    curr = parr + i + 1;
+    next = curr + 1;
+  }
+}
+
+int main()
+{
+  int arr[] = { 55,22,33,44,11 };
+  int len = sizeof(arr) / sizeof(int);
+  cout << "Length = " << len << endl;
+  cout << "Before = ";
+  for (int i = 0; i < len; i++)
+  {
+    cout << arr[i] << " ";
+  }
+  selectionSort(arr, len);
+  cout << endl << "After = ";
+  for (int i = 0; i < len; i++)
+  {
+    cout << arr[i] << " ";
+  }
+  return 0;
+}
+
+###########################################
+Insertion sort (ASCENDING ORDER)
+###########################################
+
+#include <iostream>
+#include <string.h>
+
+using namespace std;
+
+void insertionSort(int*, int);
+
+void insertionSort(int* parr, int len)
+{
+  int *curr = parr;
+  int *next = parr + 1;
+  for (int i = 0; i < len - 1; i++)
+  {
+    for (int j = i; j >= 0; j--)
+    {
+      if (*(parr + j + 1) < *(parr + j))
+      {
+        int temp;
+        temp = *(parr + j);
+        *(parr + j) = *(parr + j + 1);
+        *(parr + j + 1) = temp;
+      }
+    }
+  }
+}
+
+int main()
+{
+  int arr[] = { 50, 40, 30, 20, 10 };
+  int len = sizeof(arr) / sizeof(int);
+  cout << "Len = " << len << endl;
+  cout << "Before = ";
+  for (int i = 0; i < len; i++)
+  {
+    cout << arr[i] << " ";
+  }
+  insertionSort(arr, len);
+  cout << endl << "After = ";
+  for (int i = 0; i < len; i++)
+  {
+    cout << arr[i] << " ";
+  }
+  return 0;
+}
